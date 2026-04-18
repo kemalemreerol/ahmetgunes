@@ -1,0 +1,157 @@
+@page
+@model IndexModel
+@using TranscriptApp.Models
+@{
+    ViewData["Title"] = "ESKİŞEHİR OSMANGAZİ ÜNİVERSİTESİ";
+}
+
+<section class="page-title">
+    <div class="brand-title">
+        <img class="page-logo" src="~/images/site-logo-outlined.png" alt="Eskişehir Osmangazi Üniversitesi" />
+        <div>
+            <p class="eyebrow">Excel transkript hazırlama</p>
+            <h1>ESKİŞEHİR OSMANGAZİ ÜNİVERSİTESİ</h1>
+            <p>Excel dosyasını yükle, temizlenen ders listesini PDF veya DOCX olarak indir.</p>
+        </div>
+    </div>
+</section>
+
+<section class="upload-panel">
+    <form method="post" enctype="multipart/form-data" asp-page-handler="Upload">
+        <label class="form-label fw-semibold" asp-for="Workbook">Excel dosyası</label>
+        <div class="upload-row">
+            <input class="form-control" asp-for="Workbook" type="file" accept=".xlsx" />
+            <button class="btn btn-primary" type="submit">Yükle ve Hazırla</button>
+        </div>
+        <div class="option-grid">
+            <fieldset>
+                <legend>Ortalama hangi ağırlığa göre hesaplansın?</legend>
+                <label>
+                    <input asp-for="CalculationBasis" type="radio" value="@TranscriptCalculationBasis.Ects" />
+                    AKTS’ye göre hesapla
+                </label>
+                <label>
+                    <input asp-for="CalculationBasis" type="radio" value="@TranscriptCalculationBasis.Credit" />
+                    Krd’ye göre hesapla
+                </label>
+            </fieldset>
+            <fieldset>
+                <legend>Transkript kapsamı ne olsun?</legend>
+                <label>
+                    <input asp-for="Scope" type="radio" value="@TranscriptScope.AllCourses" />
+                    Tüm dersler
+                </label>
+                <label>
+                    <input asp-for="Scope" type="radio" value="@TranscriptScope.FirstTwoYears" />
+                    İlk iki yıl (NYY 1-4)
+                </label>
+            </fieldset>
+        </div>
+    </form>
+</section>
+
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">@Model.ErrorMessage</div>
+}
+
+@if (Model.Report is not null)
+{
+    <section class="result-panel">
+        <div class="result-header">
+            <div>
+                <p class="eyebrow">Hazır</p>
+                <dl class="student-info">
+                    <dt>Öğrenci No</dt>
+                    <dd>@(Model.Report.StudentNumber ?? "-")</dd>
+                    <dt>Öğrenci Adı Soyadı</dt>
+                    <dd>@(Model.Report.StudentFullName ?? "-")</dd>
+                    <dt>Öğrenci TC/YU Numarası</dt>
+                    <dd>@(Model.Report.StudentIdentityNumber ?? "-")</dd>
+                    <dt>Fakülte</dt>
+                    <dd>@(Model.Report.FacultyName ?? "-")</dd>
+                    <dt>Bölüm</dt>
+                    <dd>@(Model.Report.ProgramCode ?? "-")</dd>
+                </dl>
+                <p class="student-line">
+                    Hesaplama Türü: @IndexModel.CalculationBasisLabel(Model.Report.CalculationBasis)
+                    <span>Kapsam: @IndexModel.ScopeLabel(Model.Report.Scope)</span>
+                    <span>Genel Ortalama: @IndexModel.AverageText(Model.Report.OverallAverage)</span>
+                    <span>Toplam Krd: @IndexModel.NumberText(Model.Report.TotalCredit)</span>
+                    <span>Toplam AKTS: @IndexModel.NumberText(Model.Report.TotalEcts)</span>
+                </p>
+            </div>
+
+            <div class="download-actions">
+                <form method="post" asp-page-handler="DownloadPdf">
+                    <input type="hidden" asp-for="UploadId" />
+                    <input type="hidden" asp-for="CalculationBasis" />
+                    <input type="hidden" asp-for="Scope" />
+                    <button class="btn btn-danger" type="submit">PDF İndir</button>
+                </form>
+                <form method="post" asp-page-handler="DownloadDocx">
+                    <input type="hidden" asp-for="UploadId" />
+                    <input type="hidden" asp-for="CalculationBasis" />
+                    <input type="hidden" asp-for="Scope" />
+                    <button class="btn btn-success" type="submit">DOCX İndir</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="summary-grid">
+            <div>
+                <span>@Model.Report.Summary.IncludedRows</span>
+                <small>Rapora alınan ders</small>
+            </div>
+            <div>
+                <span>@Model.Report.Summary.EmptyNotesSkipped</span>
+                <small>Boş not satırı</small>
+            </div>
+            <div>
+                <span>@Model.Report.Summary.StarredNotesSkipped</span>
+                <small>Yıldızlı satır</small>
+            </div>
+            <div>
+                <span>@Model.Report.Summary.InvalidNotesSkipped</span>
+                <small>Okunamayan not</small>
+            </div>
+        </div>
+
+        <h3>Önizleme</h3>
+        <div class="period-summary">
+            @foreach (var average in Model.Report.PeriodAverages)
+            {
+                <span>@average.Period.Year / @average.Period.Semester: @IndexModel.AverageText(average.Average), Krd @IndexModel.NumberText(average.TotalCredit), AKTS @IndexModel.NumberText(average.TotalEcts)</span>
+            }
+        </div>
+        <div class="table-responsive">
+            <table class="table table-sm transcript-table">
+                <thead>
+                    <tr>
+                        <th>Yıl</th>
+                        <th>Yarıyıl</th>
+                        <th>Ders Kodu</th>
+                        <th>Ders Adı</th>
+                        <th>Krd</th>
+                        <th>AKTS</th>
+                        <th>Harf Notu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var course in Model.Report.Courses.Take(12))
+                    {
+                        <tr>
+                            <td>@course.Year</td>
+                            <td>@course.Semester</td>
+                            <td>@course.CourseCode</td>
+                            <td>@course.CourseName</td>
+                            <td>@course.Credit</td>
+                            <td>@course.Ects</td>
+                            <td>@course.LetterGrade</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+}

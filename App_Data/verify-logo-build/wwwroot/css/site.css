@@ -1,0 +1,227 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background: #f6f8f7;
+  color: #16211f;
+}
+
+.navbar-brand {
+  font-weight: 700;
+}
+
+.page-title {
+  padding: 32px 0 20px;
+  text-align: center;
+}
+
+.page-logo {
+  display: block;
+  height: 92px;
+  margin: 0 auto 12px;
+  width: 92px;
+}
+
+.page-title h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin: 0 0 8px;
+}
+
+.page-title p {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  color: #36735f;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.upload-panel,
+.result-panel {
+  background: #ffffff;
+  border: 1px solid #dbe4e0;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(23, 43, 37, .07);
+  margin-bottom: 22px;
+  padding: 22px;
+}
+
+.upload-row {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.option-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 18px;
+}
+
+.option-grid fieldset {
+  border: 1px solid #d6e4de;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.option-grid legend {
+  float: none;
+  font-size: .95rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  width: auto;
+}
+
+.option-grid label {
+  display: block;
+  margin: 6px 0;
+}
+
+.option-grid input {
+  margin-right: 6px;
+}
+
+.btn {
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.btn-primary {
+  background: #176b5a;
+  border-color: #176b5a;
+}
+
+.btn-primary:hover {
+  background: #125548;
+  border-color: #125548;
+}
+
+.result-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+}
+
+.result-header h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.student-line {
+  margin: 8px 0 0;
+}
+
+.student-line span {
+  margin-left: 16px;
+}
+
+.download-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.summary-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 22px 0;
+}
+
+.summary-grid div {
+  background: #eef5f2;
+  border: 1px solid #d6e4de;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.summary-grid span {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.summary-grid small {
+  color: #52615d;
+}
+
+.result-panel h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.transcript-table {
+  background: #ffffff;
+  border: 1px solid #dbe4e0;
+}
+
+.transcript-table th {
+  background: #e9efed;
+}
+
+.period-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+
+.period-summary span {
+  background: #f4f7f6;
+  border: 1px solid #dbe4e0;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.transcript-table td,
+.transcript-table th {
+  vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+  .upload-row,
+  .option-grid,
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-header {
+    display: block;
+  }
+
+  .download-actions {
+    margin-top: 14px;
+  }
+
+  .student-line span {
+    display: block;
+    margin-left: 0;
+  }
+}
