@@ -6,10 +6,9 @@ ENV ASPNETCORE_URLS=http://0.0.0.0:10000
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["TranscriptApp/TranscriptApp.csproj", "TranscriptApp/"]
-RUN dotnet restore "./TranscriptApp/TranscriptApp.csproj"
+COPY ["TranscriptApp.csproj", "./"]
+RUN dotnet restore "./TranscriptApp.csproj"
 COPY . .
-WORKDIR "/src/TranscriptApp"
 RUN dotnet build "./TranscriptApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
